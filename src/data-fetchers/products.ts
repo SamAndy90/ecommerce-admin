@@ -1,11 +1,14 @@
 import axios from "axios";
+import { ProductDB } from "models/Product";
 
 export type ProductType = {
   _id?: string;
   title: string;
+  category?: string;
   description: string;
   price: number;
   images?: string[];
+  properties?: Record<string, string>;
 };
 
 export const getProducts = async () => {
@@ -20,8 +23,8 @@ export const getProduct = async (id: string) => {
     .then((data) => data.data);
 };
 
-export const createProduct = async (data: ProductType) => {
-  return await axios.post<ProductType>("/api/products", data);
+export const createProduct = async (data: ProductDB) => {
+  return await axios.post<ProductDB>("/api/products", data);
 };
 
 export const editProduct = async (data: ProductType) => {

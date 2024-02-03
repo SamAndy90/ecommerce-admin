@@ -22,9 +22,9 @@ export default function DeletePage({ params }: { params: { id: string } }) {
   });
 
   return (
-    <div>
+    <div className={"py-8"}>
       <Title className={"text-center mb-8"}>
-        Do you realy want delete &quot;<span>{isSuccess && data.title}</span>
+        Do you realy want to delete &quot;<span>{isSuccess && data.title}</span>
         &quot;
       </Title>
       <div className={"flex items-center justify-center gap-6"}>

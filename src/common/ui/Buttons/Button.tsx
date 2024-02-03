@@ -31,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={{
           button: twMerge(
             clsx(
-              "flex items-center justify-center rounded-md font-semibold transition-colors ease-linear text-white",
+              "flex items-center justify-center rounded-md transition-colors ease-linear text-white",
               {
                 // Primary
                 "bg-blue-300": colorVariant === "primary" && loading,

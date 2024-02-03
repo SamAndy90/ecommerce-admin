@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Title } from "common/Title";
-import ProductForm from "components/ProductForm";
+import ProductForm from "components/Products/ProductForm";
 import { getProduct } from "data-fetchers/products";
 
 type EditProductProps = {

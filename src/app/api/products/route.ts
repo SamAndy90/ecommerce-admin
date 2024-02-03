@@ -1,9 +1,9 @@
-import { dbConnect } from "lib/db-connect";
+import { mongoConnect } from "lib/mongo-connect";
 import Product from "models/Product";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-  await dbConnect();
+  await mongoConnect();
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  await dbConnect();
+  await mongoConnect();
 
   const body = await req.json();
   const product = await Product.create(body);
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  await dbConnect();
+  await mongoConnect();
 
   const body = await req.json();
   await Product.updateOne({ _id: body.id }, { ...body });
@@ -34,7 +34,7 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  await dbConnect();
+  await mongoConnect();
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export async function dbConnect() {
+export async function mongoConnect() {
   if (mongoose.connection.readyState === 1) {
     return await mongoose.connection.asPromise();
   } else {

@@ -1,9 +1,6 @@
 import Layout from "components/Layout";
+import { PropsWithChildren } from "react";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: PropsWithChildren) {
   return <Layout>{children}</Layout>;
 }

@@ -13,8 +13,8 @@ export default function Providers({
 }) {
   const client = new QueryClient();
   return (
-    <QueryClientProvider client={client}>
-      <SessionProvider session={session}>{children}</SessionProvider>
-    </QueryClientProvider>
+    <SessionProvider session={session}>
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+    </SessionProvider>
   );
 }

@@ -24,7 +24,10 @@ export function FormTextInput<T extends FieldValues>(
       name={fieldName}
       control={control}
       render={({ field, formState: { errors } }) => {
-        const error = path<FieldError>(fieldName.split("."), errors) as FieldError;
+        const error = path<FieldError>(
+          fieldName.split("."),
+          errors
+        ) as FieldError;
 
         return (
           <TextInput

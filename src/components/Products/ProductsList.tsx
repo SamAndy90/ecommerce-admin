@@ -10,7 +10,7 @@ type ProductsListProps = {
 
 export default function ProductsList({ data }: ProductsListProps) {
   return (
-    <div className={"flex flex-col gap-y-2"}>
+    <div className={"flex flex-col gap-y-2 overflow-y-scroll max-h-screen"}>
       {data.map((product) => {
         const { title, description, _id } = product;
         return (
@@ -20,20 +20,36 @@ export default function ProductsList({ data }: ProductsListProps) {
             }
             key={_id}
           >
-            <div className={"flex-1 flex divide-x divide-blue-900"}>
-              <div className={"basis-52 px-3"}>{title}</div>
-              <div className={"flex-1 px-3"}>{description}</div>
+            <div
+              className={"flex-1 flex items-center divide-x divide-blue-900"}
+            >
+              <div className={"sm:basis-44 md:basis-48 lg:basis-52 px-3"}>
+                {title}
+              </div>
+              <div
+                className={
+                  "hidden sm:[display:-webkit-box] flex-1 px-3 line-clamp-2"
+                }
+              >
+                {description}
+              </div>
             </div>
-            <div className={"flex gap-2"}>
+            <div className={"flex lg:flex-row flex-col gap-y-1 gap-x-2"}>
               <Link href={`products/edit/${_id}`}>
-                <LinkButton className={{ button: "flex gap-1 items-center" }}>
+                <LinkButton
+                  className={{
+                    button: "flex gap-1 items-center justify-center w-full",
+                  }}
+                >
                   <FiEdit />
                   Edit
                 </LinkButton>
               </Link>
               <Link href={`products/delete/${_id}`}>
                 <LinkButton
-                  className={{ button: "flex gap-1 items-center" }}
+                  className={{
+                    button: "flex gap-1 items-center justify-center w-full",
+                  }}
                   colorVariant={"danger"}
                 >
                   <IoTrashOutline />

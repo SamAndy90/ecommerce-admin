@@ -1,20 +1,28 @@
 import axios from "axios";
+import { PropertyDB } from "models/Category";
 
 type ParentType = {
   _id: string;
   categoryName: string;
 };
 
+export type FormProperty = {
+  property: string;
+  values: string;
+};
+
 export type CategoryType = {
   _id: string;
   categoryName: string;
   parent?: ParentType;
+  properties?: PropertyDB[];
 };
 
 export type EditCategoryType = {
   _id: string;
   categoryName: string;
   parent?: string;
+  properties?: FormProperty[];
 };
 
 export const getCategories = async () => {

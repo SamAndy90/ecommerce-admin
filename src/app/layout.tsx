@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "components/Providers";
 import Navigation from "components/Navigation";
-import Login from "components/Login";
+import AuthWrapper from "components/Auth/AuthWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,14 +21,18 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Login>
-            <main className={"flex bg-blue-900 p-2 min-h-screen"}>
+          <main
+            className={
+              "flex flex-col md:flex-row bg-blue-900 min-h-screen py-2 px-2"
+            }
+          >
+            <AuthWrapper>
               <Navigation />
-              <div className={"text-blue-900 bg-white flex-grow rounded-lg"}>
+              <div className={"text-blue-900 bg-white grow rounded-lg"}>
                 {children}
               </div>
-            </main>
-          </Login>
+            </AuthWrapper>
+          </main>
         </Providers>
       </body>
     </html>

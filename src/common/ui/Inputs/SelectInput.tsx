@@ -56,30 +56,30 @@ export function SelectInput(props: SelectInputProps) {
   }
 
   return (
-    <div className={"flex flex-col gap-y-1"}>
+    <div className={"flex flex-col gap-y-2 min-w-[160px]"}>
       {label && (
         <label
           className={twMerge(
-            "text-sm font-medium text-gray-500",
-            className?.label,
+            "font-medium text-blue-900 text-md",
+            className?.label
           )}
         >
           {label}
         </label>
       )}
       <Listbox value={value} onChange={onChange} multiple={multiple}>
-        <div className={"relative min-w-[160px]"}>
+        <div className={"relative min-w-[100px]"}>
           <Listbox.Button
             className={
               "flex w-full items-center rounded border border-gray-200 bg-white"
             }
           >
-            <span className={"flex-1 px-4 py-3"}>{displayValue}</span>
+            <span className={"flex-1 px-4 py-2"}>{displayValue}</span>
 
-            <div className={"px-4"}>
+            <div className={"px-3"}>
               <TbChevronDown
                 aria-hidden
-                className={"h-4 w-4 select-none text-gray-400"}
+                className={"h-4 w-4 select-none text-blue-700"}
               />
             </div>
           </Listbox.Button>
@@ -105,19 +105,17 @@ export function SelectInput(props: SelectInputProps) {
                       className={clsx(
                         "flex cursor-pointer select-none items-center justify-between px-4 py-2",
                         {
-                          "bg-gray-25": active,
-                          "!bg-mediumBlue-50 !text-mediumBlue-900": selected,
-                          "text-gray-900": !active,
-                        },
+                          "bg-blue-50": active,
+                          "!bg-blue-100 !text-blue-900": selected,
+                          "text-gray-700": !active,
+                        }
                       )}
                     >
                       {i.label}
 
                       {selected && multiple && (
                         <TbCheck
-                          className={
-                            "h-4 w-4 flex-shrink-0 text-mediumBlue-500"
-                          }
+                          className={"h-4 w-4 flex-shrink-0 text-blue-500"}
                         />
                       )}
                     </li>
