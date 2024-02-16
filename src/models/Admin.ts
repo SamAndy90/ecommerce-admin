@@ -1,11 +1,11 @@
 import { Schema, model, models } from "mongoose";
 import bcrypt from "bcrypt";
 
-export type UserType = {
+export type AdminType = {
   email: string;
   password: string;
-  name: string;
-  lastName: string;
+  name?: string;
+  image?: string;
 };
 
 export function hashPassword(str: string) {
@@ -13,18 +13,23 @@ export function hashPassword(str: string) {
   return bcrypt.hashSync(str, salt);
 }
 
-const userSchema = new Schema<UserType>(
+const adminSchema = new Schema<AdminType>(
   {
-    email: { type: String, required: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
     password: { type: String, required: true },
     name: String,
-    lastName: String,
+    image: String,
   },
   { timestamps: true }
 );
 
-userSchema.post("validate", (user) => {
+adminSchema.post("validate", (user) => {
   user.password = hashPassword(user.password);
 });
 
-export default models.User || model("User", userSchema);
+export default models.Admin || model("Admin", adminSchema);

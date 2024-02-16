@@ -4,64 +4,67 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormTextInput } from "common/FormInputs";
 import { FormPasswordInput } from "common/FormInputs/FormPasswordInput";
 import { Button } from "common/ui";
-import { signIn } from "next-auth/react";
 import { FormProvider, useForm } from "react-hook-form";
 import { getDefaults } from "utils/zod";
 import z from "zod";
+import { Title } from "common/Title";
+import { createAdmin } from "data-fetchers/auth";
+import { AxiosError } from "axios";
 
-const loginSchema = z.object({
+const adminSchema = z.object({
   email: z.string().email("Email is required").default(""),
-  password: z.string().min(1, "Password is required").default(""),
+  password: z.string().min(5, "Password is required").default(""),
+  name: z.string().default(""),
 });
 
-type Form = z.infer<typeof loginSchema>;
+type Form = z.infer<typeof adminSchema>;
+type AdminFormProps = {
+  close: () => void;
+};
 
-export default function LoginForm() {
+export function AdminForm({ close }: AdminFormProps) {
   const form = useForm<Form>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: getDefaults(loginSchema),
+    resolver: zodResolver(adminSchema),
+    defaultValues: getDefaults(adminSchema),
   });
-
   const {
     handleSubmit,
+    reset,
     setError,
     formState: { errors, isLoading },
   } = form;
 
   async function onSubmit(data: Form) {
-    const res = await signIn("credentials", { ...data, redirect: false });
-    if (res?.error) {
-      setError("root", {
-        type: "random",
-        message: res.error,
-      });
+    try {
+      await createAdmin(data);
+      reset();
+      close();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError("root", {
+          type: "random",
+          message: error.response?.data.error || error.message,
+        });
+        setError("email", {}, { shouldFocus: true });
+      }
     }
   }
-
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={"w-full max-w-screen-xs"}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
           className={
             "flex flex-col gap-y-4 md:gap-y-6 bg-white py-4 px-5 rounded-2xl"
           }
         >
-          <div className={"flex flex-col gap-y-1"}>
-            <h2 className={"text-center text-3xl font-medium md:text-4xl"}>
-              Login
-            </h2>
-            <p className={"text-center text-gray-500"}>
-              Login to your admin account
-            </p>
-            <p className={"text-sm text-red-800 text-center"}>
-              admin@example.com: admin123
-            </p>
-          </div>
+          <Title>Create new Admin</Title>
 
           <div className={"flex flex-col gap-y-4 md:gap-y-5"}>
+            <FormTextInput<Form>
+              fieldName={"name"}
+              label={"Fullname"}
+              className={{ label: "text-blue-700" }}
+            />
             <FormTextInput<Form>
               fieldName={"email"}
               label={"Email"}
@@ -74,10 +77,9 @@ export default function LoginForm() {
               className={{ label: "text-blue-700" }}
             />
             <Button type={"submit"} fullWidth loading={isLoading}>
-              Login
+              Add
             </Button>
           </div>
-
           {errors.root && (
             <div
               className={

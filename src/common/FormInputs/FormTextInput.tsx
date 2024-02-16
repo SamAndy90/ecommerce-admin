@@ -31,8 +31,8 @@ export function FormTextInput<T extends FieldValues>(
 
         return (
           <TextInput
-            {...textInputProps}
             {...field}
+            {...textInputProps}
             error={!!error}
             helperText={error?.message}
           />

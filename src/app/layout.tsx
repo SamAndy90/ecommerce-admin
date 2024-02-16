@@ -4,11 +4,12 @@ import "./globals.css";
 import Providers from "components/Providers";
 import Navigation from "components/Navigation";
 import AuthWrapper from "components/Auth/AuthWrapper";
+import clsx from "clsx";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "E-commerce",
+  title: "E-commerce Admin",
   description: "Welcome to E-commerce app",
 };
 
@@ -19,7 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={clsx(
+          inter.className,
+          "max-w-screen-2xl mx-auto bg-blue-900"
+        )}
+      >
         <Providers>
           <main
             className={

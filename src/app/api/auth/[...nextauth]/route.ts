@@ -1,14 +1,10 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth, { AuthOptions } from "next-auth";
-import { User as UserType } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import { mongoConnect } from "lib/mongo-connect";
-import User from "models/User";
+import Admin, { type AdminType } from "models/Admin";
 import bcrypt from "bcrypt";
 import clientPromise from "lib/mongo-client";
-
-const adminEmails = ["stadnyk.andy@gmail.com", "stadnikbogdanka@gmail.com"];
 
 export const authConfig: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -16,53 +12,49 @@ export const authConfig: AuthOptions = {
   session: {
     strategy: "jwt",
   },
-  callbacks: {
-    async session({ session, newSession }) {
-      if (adminEmails.includes(session?.user?.email!)) {
-        return session;
-      } else {
-        return newSession;
-      }
-    },
-  },
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_ID!,
-      clientSecret: process.env.GOOGLE_SECRET!,
-    }),
     CredentialsProvider({
       id: "credentials",
       credentials: {
         email: {
-          label: "Email",
           type: "email",
-          placeholder: "test@example.com",
-          required: true,
         },
         password: {
-          label: "Password",
           type: "password",
-          required: true,
         },
       },
       async authorize(credentials) {
-        const pass = credentials?.password;
-        const email = credentials?.email;
+        const { email, password: pass } = credentials!;
 
         await mongoConnect();
-        const user = await User.findOne({ email });
-        const isOk = user && bcrypt.compareSync(pass!, user?.password);
+        const user = await Admin.findOne<AdminType>({ email });
+        if (!user)
+          throw new Error(
+            "This user isn`t admin. Please request access from the admin."
+          );
 
-        const { password, ...userWithoutPass } = user?._doc;
+        const isPasswordCorrect = await bcrypt.compare(pass!, user.password);
+        if (!isPasswordCorrect)
+          throw new Error("Password is not correct. Please try again");
 
-        if (isOk) return userWithoutPass as UserType;
-        return null;
+        const { password, ...userWithoutPass } = JSON.parse(
+          JSON.stringify(user)
+        );
+        return userWithoutPass;
       },
     }),
   ],
-  // pages: {
-  //   signIn: "/login",
-  // },
+  callbacks: {
+    jwt({ token, trigger, session }) {
+      if (trigger === "update") {
+        const newData = JSON.parse(session.config.data);
+        token.name = newData.name;
+        token.email = newData.email;
+        token.picture = newData.image;
+      }
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authConfig);

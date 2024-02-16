@@ -204,14 +204,12 @@ export default function ProductForm({ product }: ProductFormProps) {
                 }}
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  // Do something with the response
                   const links = res.map((file) => {
                     return file.url;
                   });
                   setImages((prev) => [...prev, ...links]);
                 }}
                 onUploadError={(error: Error) => {
-                  // Do something with the error.
                   console.log(`ERROR! ${error.message}`);
                 }}
               />
