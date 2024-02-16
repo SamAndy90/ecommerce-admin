@@ -6,7 +6,7 @@ import Admin, { type AdminType } from "models/Admin";
 import bcrypt from "bcrypt";
 import clientPromise from "lib/mongo-client";
 
-export const authConfig: AuthOptions = {
+const authConfig: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise),
   session: {
